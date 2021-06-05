@@ -3,7 +3,7 @@
 *  Run `pip install -r requirements.txt`
 
 ## Run the spiders
-####Individually
+#### Individually
 To run an individual spider and save the results to a csv file you can do the following
 
 `scrapy crawl {name of spider} -O filename.csv`
