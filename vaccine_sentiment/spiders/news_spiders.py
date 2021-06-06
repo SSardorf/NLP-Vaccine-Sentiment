@@ -19,7 +19,7 @@ class FoxSpider(scrapy.Spider):
             "Channel": "Fox News",
             "Date": response.css("time::text").get(),
             "URL": response.request.url,
-            "Content": " ".join(response.xpath("//div[contains(@class, 'article-body')]/p/text()|//div[contains(@class, 'article-body')]/p/a/text()").getall()),
+            "Content": " ".join(response.xpath("//div[contains(@class, 'article-body')]/p/text()|//div[contains(@class, 'article-body')]/p/a/text()|//div[contains(@class, 'article-body')]/p/em/text()").getall()),
         }
 
 class AbcSpider(scrapy.Spider):
@@ -39,7 +39,7 @@ class AbcSpider(scrapy.Spider):
             "Channel": "ABC News",
             "Date": response.xpath("//div[contains(@class, 'Byline__Meta--publishDate')]/text()").get(),
             "URL": response.request.url,
-            "Content": " ".join(response.xpath("//section[contains(@class, 'story')]/p/text()|//section[contains(@class, 'story')]/p/a/text()").getall()),
+            "Content": " ".join(response.xpath("//section[contains(@class, 'story')]/p/text()|//section[contains(@class, 'story')]/p/a/text()|//section[contains(@class, 'story')]/p/em/text()").getall()),
         }
 
 class CbsSpider(scrapy.Spider):
@@ -93,13 +93,18 @@ class NytSpider(scrapy.Spider):
                 start_urls.append(i)
 
     def parse(self, response, df=df):
+        date_response = response.xpath("//time/text()|//time/span/text()").getall()
+        if "published" not in date_response[0].lower():
+            date = date_response[0]
+        else:
+            date = date_response[1]
         yield {
             "Accessed": datetime.datetime.today(),
             "Title":response.css("h1::text").get(),
             "Channel": "New York Times",
-            "Date": response.xpath("//time/text()").get(),
+            "Date": date,
             "URL": response.request.url,
-            "Content": " ".join(response.xpath("//section[contains(@name, 'articleBody')]//p/text()|//section[contains(@name, 'articleBody')]//p/a/text()").getall()),
+            "Content": " ".join(response.xpath("//section[contains(@name, 'articleBody')]//p/text()|//section[contains(@name, 'articleBody')]//p/a/text()|//section[contains(@name, 'articleBody')]//p/em/text()").getall()),
         }
 
 class HufSpider(scrapy.Spider):
@@ -124,5 +129,3 @@ class HufSpider(scrapy.Spider):
             "URL": response.request.url,
             "Content": " ".join(response.xpath("//div[contains(@class, 'entry__text')]//p/text()").getall()),
         }
-# https://emm.newsbrief.eu/NewsBrief/searchresults/en/advanced.html?lang=en&sourceCountry=US&source=ABCnews%2Ccnn%2Cfoxnews%2Cnytimes%2Chuffingtonpost-us-en&atLeast=vaccine&dateFrom=2021-01-12&dateTo=2021-05-31&queryType=advanced
-

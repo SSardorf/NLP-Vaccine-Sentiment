@@ -11,10 +11,6 @@ class NewsbriefSpider(scrapy.Spider):
     def parse(self, response):
         links = response.xpath("//a[contains(@class,'headline_link')]/@href").extract()
         links_with_nl = [l + "\n" for l in links]
-        with open("links2.txt", 'a') as f:
+        with open("links.txt", 'a') as f:
             f.writelines(links_with_nl)
             f.close()
-# https://emm.newsbrief.eu/NewsBrief/dynamic?language=en&source=ABCnews%2Cfoxnews%2Cnytimes&category=EU-CoronavirusVaccine&atLeast=Astrazeneca%2C%20Moderna%2C%20Vaccine%2C%20BioNTech%2C%20Vaccination%2C%20Johnson%20%26%20Johnson&dateFrom=2021-01-08&dateTo=2021-06-06
-# https://emm.newsbrief.eu/NewsBrief/dynamic?lang=en&sourceCountry=US&source=ABCnews%2Ccnn%2Cfoxnews%2Cnytimes%2Chuffingtonpost-us-en&atLeast=vaccine&dateFrom=2021-01-12&dateTo=2021-05-31&queryType=advanced
-# https://emm.newsbrief.eu/NewsBrief/dynamic?language=en&page=1&edition=searcharticles&option=advanced&atLeast=Astrazeneca%2C+Moderna%2C+Vaccine%2C+BioNTech%2C+Vaccination%2C+Johnson+%26+Johnson&dateFrom=2021-01-08&dateTo=2021-06-06&lang=en&category=EU-CoronavirusVaccine&source=ABCnews&source=foxnews&source=nytimes&_=1622985903001
-# https://emm.newsbrief.eu/NewsBrief/dynamic?language=en&page=1&edition=searcharticles&option=advanced&atLeast=Astrazeneca%2C+Moderna%2C+Vaccine%2C+BioNTech%2C+Vaccination%2C+Johnson+%26+Johnson&dateFrom=2021-01-08&dateTo=2021-06-06&lang=en&source=ABCnews&source=foxnews&source=nytimes&_=1622985903001 #Maxpage 265 #Firstdate march 6
