@@ -19,7 +19,7 @@ class FoxSpider(scrapy.Spider):
             "Channel": "Fox News",
             "Date": response.css("time::text").get(),
             "URL": response.request.url,
-            "Content": " ".join(response.xpath("//div[contains(@class, 'article-body')]/p/text()").getall()),
+            "Content": " ".join(response.xpath("//div[contains(@class, 'article-body')]/p/text()|//div[contains(@class, 'article-body')]/p/a/text()").getall()),
         }
 
 class AbcSpider(scrapy.Spider):
@@ -39,7 +39,7 @@ class AbcSpider(scrapy.Spider):
             "Channel": "ABC News",
             "Date": response.xpath("//div[contains(@class, 'Byline__Meta--publishDate')]/text()").get(),
             "URL": response.request.url,
-            "Content": " ".join(response.xpath("//section[contains(@class, 'story')]/p/text()").getall()),
+            "Content": " ".join(response.xpath("//section[contains(@class, 'story')]/p/text()|//section[contains(@class, 'story')]/p/a/text()").getall()),
         }
 
 class CbsSpider(scrapy.Spider):
@@ -89,7 +89,7 @@ class NytSpider(scrapy.Spider):
     df = pd.DataFrame(columns=['URL', 'Title', 'Date', 'Content', 'Channel'])
     with open("links.txt", "r") as f:
         for i in f.read().splitlines():
-            if i.startswith("https://nytimes.com"):
+            if i.startswith("https://www.nytimes.com"):
                 start_urls.append(i)
 
     def parse(self, response, df=df):
@@ -99,7 +99,7 @@ class NytSpider(scrapy.Spider):
             "Channel": "New York Times",
             "Date": response.xpath("//time/text()").get(),
             "URL": response.request.url,
-            "Content": " ".join(response.xpath("//section[contains(@name, 'articleBody')]//p/text()").getall()),
+            "Content": " ".join(response.xpath("//section[contains(@name, 'articleBody')]//p/text()|//section[contains(@name, 'articleBody')]//p/a/text()").getall()),
         }
 
 class HufSpider(scrapy.Spider):
